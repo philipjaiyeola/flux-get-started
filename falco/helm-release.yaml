@@ -37,26 +37,9 @@ spec:
       rules_file:
         - /etc/falco/falco_rules.yaml
         - /etc/falco/falco_rules.local.yaml
-        #- /etc/falco/k8s_audit_rules.yaml
-      # plugins:
-      #   - init_config: ""
-      #     library_path: libk8saudit.so
-      #     name: k8saudit
-      #     open_params: "http://:9765/k8s-audit"
-      #   - init_config: ""
-      #     library_path: libjson.so
-      #     name: json  
-      # load_plugins: [k8saudit, json]
-      # json_output: true
-      # json_include_output_property: true
       http_output: 
         enabled: true 
         url: "http://falcosidekick:2801/"
 
     falcosidekick:
       enabled: true
-      config:
-        aws: 
-          cloudwatchlogs: 
-            loggroup: ${CLOUDWATCH_LOG_GROUP}
-            minimumpriority: "warning"
