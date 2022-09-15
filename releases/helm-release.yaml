@@ -1,0 +1,45 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: falco
+  namespace: falco
+spec:
+  chart:
+    spec:
+      chart: falco
+      version: ">=0.32.0"
+      sourceRef:
+        kind: HelmRepository
+        name: falco
+  interval: 1h0m0s
+  releaseName: falco
+  values:
+    serviceAccount:
+      create: true
+      name: falco
+    podAnnotations: {}
+    controller:
+      kind: deployment
+    collectors:
+      enabled: false
+    driver:
+      enabled: true 
+      kind: module
+    services:
+      - name: k8saudit-webhook
+        type: NodePort
+        ports:
+          - port: 9765
+            nodePort: 30007
+            protocol: TCP
+
+    falco:
+      rules_file:
+        - /etc/falco/falco_rules.yaml
+        - /etc/falco/falco_rules.local.yaml
+      http_output: 
+        enabled: true 
+        url: "http://falcosidekick:2801/"
+
+    falcosidekick:
+      enabled: true
